@@ -3,6 +3,7 @@ import Link from "next/link";
 import { days } from "@/data/itinerary";
 import ChecklistItem from "@/components/ChecklistItem";
 import Callout from "@/components/Callout";
+import EditableText from "@/components/EditableText";
 
 export function generateStaticParams() {
   return days.map((day) => ({ fecha: day.id }));
@@ -26,13 +27,25 @@ export default async function DayPage({
       <Link href="/" className="text-xs text-brand-600">
         ← Volver
       </Link>
-      <h1 className="mt-1 text-xl font-bold text-slate-800">{day.title}</h1>
+      <EditableText
+        id={`${day.id}-title`}
+        defaultText={day.title}
+        className="mt-1 block text-xl font-bold text-slate-800"
+      />
       <p className="text-sm text-slate-400">{day.date}</p>
-      {day.subtitle && <p className="mt-1 text-sm text-slate-600">{day.subtitle}</p>}
+      {day.subtitle && (
+        <EditableText
+          id={`${day.id}-subtitle`}
+          defaultText={day.subtitle}
+          className="mt-1 block text-sm text-slate-600"
+        />
+      )}
 
       {day.howToGetThere && (
         <div className="mt-3">
-          <Callout>🚇 {day.howToGetThere}</Callout>
+          <Callout>
+            🚇 <EditableText id={`${day.id}-howto`} defaultText={day.howToGetThere} as="span" />
+          </Callout>
         </div>
       )}
 
@@ -47,7 +60,9 @@ export default async function DayPage({
 
       {day.longNote && (
         <div className="mt-4">
-          <Callout>{day.longNote}</Callout>
+          <Callout>
+            <EditableText id={`${day.id}-longnote`} defaultText={day.longNote} as="span" />
+          </Callout>
         </div>
       )}
 
@@ -56,12 +71,16 @@ export default async function DayPage({
           <h2 className="mb-2 text-sm font-semibold uppercase tracking-wide text-slate-400">
             Dónde comer
           </h2>
-          <p className="text-sm text-slate-700">{day.eating}</p>
+          <EditableText
+            id={`${day.id}-eating`}
+            defaultText={day.eating}
+            className="text-sm text-slate-700"
+          />
         </div>
       )}
 
       <div className="mt-4 rounded-xl border border-slate-200 bg-slate-50 p-3 text-xs text-slate-500">
-        💰 {day.ticketsNote}
+        💰 <EditableText id={`${day.id}-tickets`} defaultText={day.ticketsNote} as="span" />
       </div>
 
       <div className="mt-6 flex justify-between text-sm">

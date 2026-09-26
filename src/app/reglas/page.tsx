@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { rules, rulesFootnote } from "@/data/itinerary";
 import Callout from "@/components/Callout";
+import EditableText from "@/components/EditableText";
 
 export default function RulesPage() {
   return (
@@ -12,14 +13,16 @@ export default function RulesPage() {
 
       <ul className="mt-4 space-y-2">
         {rules.map((r, i) => (
-          <li key={i} className="rounded-xl border border-slate-200 bg-white p-3 text-sm text-slate-700 shadow-sm">
-            {r}
+          <li key={i} className="rounded-xl border border-slate-200 bg-white p-3 shadow-sm">
+            <EditableText id={`rule-${i}`} defaultText={r} className="text-sm text-slate-700" />
           </li>
         ))}
       </ul>
 
       <div className="mt-4">
-        <Callout>{rulesFootnote}</Callout>
+        <Callout>
+          <EditableText id="rules-footnote" defaultText={rulesFootnote} as="span" />
+        </Callout>
       </div>
     </main>
   );

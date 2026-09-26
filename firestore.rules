@@ -8,11 +8,20 @@ service cloud.firestore {
       return request.auth != null &&
         request.auth.token.email in [
           'mballestero.mail@gmail.com',
-          'soledadcalvo.13@gmail.com'
+          'soledadcalvo.13@gmail.com',
+          'mirandaballestero21@gmail.com'
         ];
     }
 
     match /checklist/{itemId} {
+      allow read, write: if isFamily();
+    }
+
+    match /content/{itemId} {
+      allow read, write: if isFamily();
+    }
+
+    match /expenses/{dayId} {
       allow read, write: if isFamily();
     }
   }

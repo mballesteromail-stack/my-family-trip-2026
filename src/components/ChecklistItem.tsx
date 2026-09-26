@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useChecklist, useChecklistActions } from "@/hooks/useChecklist";
+import EditableText from "./EditableText";
 
 interface Props {
   id: string;
@@ -27,13 +28,17 @@ export default function ChecklistItem({ id, time, title }: Props) {
         />
         <div className="min-w-0 flex-1">
           {time && (
-            <div className="text-xs font-semibold uppercase tracking-wide text-brand-600">
-              {time}
-            </div>
+            <EditableText
+              id={`${id}-time`}
+              defaultText={time}
+              className="text-xs font-semibold uppercase tracking-wide text-brand-600"
+            />
           )}
-          <p className={`text-sm text-slate-800 ${entry?.done ? "line-through opacity-50" : ""}`}>
-            {title}
-          </p>
+          <EditableText
+            id={`${id}-text`}
+            defaultText={title}
+            className={`text-sm text-slate-800 ${entry?.done ? "line-through opacity-50" : ""}`}
+          />
 
           {editingNote ? (
             <div className="mt-2 flex gap-2">

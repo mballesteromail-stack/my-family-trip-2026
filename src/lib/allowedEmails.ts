@@ -3,6 +3,7 @@
 export const ALLOWED_EMAILS: string[] = [
   "mballestero.mail@gmail.com",
   "soledadcalvo.13@gmail.com",
+  "mirandaballestero21@gmail.com",
 ];
 
 export function isAllowedEmail(email: string | null | undefined): boolean {

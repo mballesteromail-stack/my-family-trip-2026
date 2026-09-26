@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { bucketList } from "@/data/itinerary";
 import ChecklistItem from "@/components/ChecklistItem";
+import EditableText from "@/components/EditableText";
 
 export default function BucketListPage() {
   return (
@@ -16,8 +17,12 @@ export default function BucketListPage() {
       <ul className="space-y-2">
         {bucketList.alreadyPlanned.map((b, i) => (
           <li key={i} className="rounded-xl border border-slate-200 bg-white p-3 text-sm shadow-sm">
-            <span className="text-slate-800">{b.item}</span>
-            <div className="text-xs text-brand-600">{b.day}</div>
+            <EditableText id={`bucket-planned-${i}-item`} defaultText={b.item} className="text-slate-800" />
+            <EditableText
+              id={`bucket-planned-${i}-day`}
+              defaultText={b.day}
+              className="text-xs text-brand-600"
+            />
           </li>
         ))}
       </ul>
@@ -36,8 +41,8 @@ export default function BucketListPage() {
       </h2>
       <ul className="space-y-2">
         {bucketList.notFitting.map((b, i) => (
-          <li key={i} className="rounded-xl border border-slate-200 bg-slate-50 p-3 text-sm text-slate-500">
-            {b}
+          <li key={i} className="rounded-xl border border-slate-200 bg-slate-50 p-3 shadow-sm">
+            <EditableText id={`bucket-notfitting-${i}`} defaultText={b} className="text-sm text-slate-500" />
           </li>
         ))}
       </ul>
