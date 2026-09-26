@@ -4,6 +4,7 @@ import { days } from "@/data/itinerary";
 import ChecklistItem from "@/components/ChecklistItem";
 import Callout from "@/components/Callout";
 import EditableText from "@/components/EditableText";
+import WeatherBadge from "@/components/WeatherBadge";
 
 export function generateStaticParams() {
   return days.map((day) => ({ fecha: day.id }));
@@ -33,6 +34,9 @@ export default async function DayPage({
         className="mt-1 block text-xl font-bold text-slate-800"
       />
       <p className="text-sm text-slate-400">{day.date}</p>
+      <div className="mt-2">
+        <WeatherBadge date={day.id} />
+      </div>
       {day.subtitle && (
         <EditableText
           id={`${day.id}-subtitle`}
@@ -65,6 +69,19 @@ export default async function DayPage({
           </Callout>
         </div>
       )}
+
+      <div className="mt-4">
+        <h2 className="mb-2 text-sm font-semibold uppercase tracking-wide text-slate-400">
+          ☔ Plan si llueve
+        </h2>
+        <div className="rounded-xl border border-sky-200 bg-sky-50 p-3">
+          <EditableText
+            id={`${day.id}-rainplan`}
+            defaultText="Sin plan alternativo cargado todavía. Mirá el pronóstico de arriba y anotá acá el plan B si hace falta."
+            className="text-sm text-slate-700"
+          />
+        </div>
+      </div>
 
       {day.eating && (
         <div className="mt-4">

@@ -1,7 +1,11 @@
+"use client";
+
 import Link from "next/link";
 import { days, trip } from "@/data/itinerary";
+import { useWeather, weatherEmoji } from "@/hooks/useWeather";
 
 export default function HomePage() {
+  const { data: weather } = useWeather();
   return (
     <main className="mx-auto max-w-md p-4">
       <h1 className="text-2xl font-bold text-slate-800">{trip.title}</h1>
@@ -17,20 +21,31 @@ export default function HomePage() {
         Día por día
       </h2>
       <ul className="space-y-2">
-        {days.map((day) => (
-          <li key={day.id}>
-            <Link
-              href={`/dia/${day.id}`}
-              className="block rounded-xl border border-slate-200 bg-white p-3 shadow-sm active:scale-[0.99]"
-            >
-              <div className="text-xs font-semibold text-brand-600">{day.weekday}</div>
-              <div className="text-sm font-medium text-slate-800">{day.title}</div>
-              {day.subtitle && (
-                <div className="text-xs text-slate-400">{day.subtitle}</div>
-              )}
-            </Link>
-          </li>
-        ))}
+        {days.map((day) => {
+          const w = weather[day.id];
+          return (
+            <li key={day.id}>
+              <Link
+                href={`/dia/${day.id}`}
+                className="flex items-center justify-between gap-2 rounded-xl border border-slate-200 bg-white p-3 shadow-sm active:scale-[0.99]"
+              >
+                <div className="min-w-0">
+                  <div className="text-xs font-semibold text-brand-600">{day.weekday}</div>
+                  <div className="text-sm font-medium text-slate-800">{day.title}</div>
+                  {day.subtitle && (
+                    <div className="text-xs text-slate-400">{day.subtitle}</div>
+                  )}
+                </div>
+                {w && (
+                  <div className="shrink-0 text-right text-xs text-slate-500">
+                    <div className="text-lg leading-none">{weatherEmoji(w.code)}</div>
+                    {Math.round(w.tempMax)}°
+                  </div>
+                )}
+              </Link>
+            </li>
+          );
+        })}
       </ul>
     </main>
   );
