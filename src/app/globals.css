@@ -5,7 +5,7 @@
 html {
   /* Sube el tamaño de fuente general (todos los text-xs/sm/base de Tailwind
      son rem, así que escalan proporcionalmente) sin romper el responsive. */
-  font-size: 116%;
+  font-size: 128%;
 }
 
 html,
