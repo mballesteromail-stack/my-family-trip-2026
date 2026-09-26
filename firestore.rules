@@ -1,0 +1,19 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Solo los emails de la familia (los mismos que en src/lib/allowedEmails.ts)
+    // pueden leer y escribir el estado del checklist.
+    function isFamily() {
+      return request.auth != null &&
+        request.auth.token.email in [
+          'mballestero.mail@gmail.com'
+          // , 'otro.familiar@gmail.com'
+        ];
+    }
+
+    match /checklist/{itemId} {
+      allow read, write: if isFamily();
+    }
+  }
+}
