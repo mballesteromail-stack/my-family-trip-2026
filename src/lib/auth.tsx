@@ -14,6 +14,7 @@ interface AuthState {
   user: User | null;
   loading: boolean;
   unauthorized: boolean;
+  deniedEmail: string | null;
   signIn: () => Promise<void>;
   signOut: () => Promise<void>;
 }
@@ -24,15 +25,18 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
   const [unauthorized, setUnauthorized] = useState(false);
+  const [deniedEmail, setDeniedEmail] = useState<string | null>(null);
 
   useEffect(() => {
     const unsub = onAuthStateChanged(auth, async (firebaseUser) => {
       if (firebaseUser && !isAllowedEmail(firebaseUser.email)) {
         setUnauthorized(true);
+        setDeniedEmail(firebaseUser.email);
         await firebaseSignOut(auth);
         setUser(null);
       } else {
         setUnauthorized(false);
+        setDeniedEmail(null);
         setUser(firebaseUser);
       }
       setLoading(false);
@@ -50,7 +54,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   };
 
   return (
-    <AuthContext.Provider value={{ user, loading, unauthorized, signIn, signOut }}>
+    <AuthContext.Provider
+      value={{ user, loading, unauthorized, deniedEmail, signIn, signOut }}
+    >
       {children}
     </AuthContext.Provider>
   );

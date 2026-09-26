@@ -7,8 +7,8 @@ service cloud.firestore {
     function isFamily() {
       return request.auth != null &&
         request.auth.token.email in [
-          'mballestero.mail@gmail.com'
-          // , 'otro.familiar@gmail.com'
+          'mballestero.mail@gmail.com',
+          'soledadcalvo.13@gmail.com'
         ];
     }
 

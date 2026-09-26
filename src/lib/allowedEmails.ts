@@ -2,7 +2,7 @@
 // Agregá acá el Gmail de cada integrante que va a usarla.
 export const ALLOWED_EMAILS: string[] = [
   "mballestero.mail@gmail.com",
-  // "otro.familiar@gmail.com",
+  "soledadcalvo.13@gmail.com",
 ];
 
 export function isAllowedEmail(email: string | null | undefined): boolean {

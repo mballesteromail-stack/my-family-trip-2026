@@ -4,7 +4,7 @@ import { useAuth } from "@/lib/auth";
 import NavBar from "./NavBar";
 
 export default function AuthGate({ children }: { children: React.ReactNode }) {
-  const { user, loading, unauthorized, signIn, signOut } = useAuth();
+  const { user, loading, unauthorized, deniedEmail, signIn, signOut } = useAuth();
 
   if (loading) {
     return (
@@ -23,10 +23,15 @@ export default function AuthGate({ children }: { children: React.ReactNode }) {
           marcar el itinerario.
         </p>
         {unauthorized && (
-          <p className="max-w-xs text-sm font-medium text-red-600">
-            Esa cuenta de Google no tiene acceso. Pedile a quien armó la app que la
-            agregue a la lista.
-          </p>
+          <div className="max-w-xs rounded-xl bg-red-50 border border-red-200 p-3 text-sm text-red-700">
+            <p className="font-medium">
+              {deniedEmail ?? "Esa cuenta"} todavía no tiene acceso.
+            </p>
+            <p className="mt-1">
+              Pedí autorización por WhatsApp indicando ese mismo Gmail para que
+              te agreguen a la lista.
+            </p>
+          </div>
         )}
         <button
           onClick={signIn}
