@@ -16,11 +16,15 @@ const END_DATE = "2026-10-11";
 // Central Park, NYC
 const LAT = 40.78;
 const LON = -73.97;
+const REFRESH_MS = 30 * 60 * 1000; // 30 minutos
 
 let cachedPromise: Promise<WeatherMap> | null = null;
+let cachedAt = 0;
+const listeners = new Set<(map: WeatherMap) => void>();
 
-function fetchWeather(): Promise<WeatherMap> {
-  if (!cachedPromise) {
+function fetchWeather(force = false): Promise<WeatherMap> {
+  const stale = Date.now() - cachedAt > REFRESH_MS;
+  if (!cachedPromise || (force && stale)) {
     const url =
       `https://api.open-meteo.com/v1/forecast?latitude=${LAT}&longitude=${LON}` +
       `&daily=temperature_2m_max,temperature_2m_min,precipitation_probability_max,weathercode` +
@@ -39,7 +43,9 @@ function fetchWeather(): Promise<WeatherMap> {
             precipProb: json.daily.precipitation_probability_max[i],
             code: json.daily.weathercode[i],
           };
-        })
+        });
+        cachedAt = Date.now();
+        listeners.forEach((l) => l(map));
         return map;
       })
       .catch(() => ({}));
@@ -53,14 +59,28 @@ export function useWeather() {
 
   useEffect(() => {
     let cancelled = false;
-    fetchWeather().then((map) => {
+
+    const apply = (map: WeatherMap) => {
       if (!cancelled) {
         setData(map);
         setLoading(false);
       }
-    });
+    };
+
+    fetchWeather().then(apply);
+    listeners.add(apply);
+
+    const interval = setInterval(() => fetchWeather(true), REFRESH_MS);
+    const onVisible = () => {
+      if (document.visibilityState === "visible") fetchWeather(true).then(apply);
+    };
+    document.addEventListener("visibilitychange", onVisible);
+
     return () => {
       cancelled = true;
+      listeners.delete(apply);
+      clearInterval(interval);
+      document.removeEventListener("visibilitychange", onVisible);
     };
   }, []);
 

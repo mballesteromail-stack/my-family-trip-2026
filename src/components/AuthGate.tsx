@@ -4,7 +4,7 @@ import { useAuth } from "@/lib/auth";
 import NavBar from "./NavBar";
 
 export default function AuthGate({ children }: { children: React.ReactNode }) {
-  const { user, loading, unauthorized, deniedEmail, signIn, signOut } = useAuth();
+  const { user, loading, unauthorized, deniedEmail, authError, signIn, signOut } = useAuth();
 
   if (loading) {
     return (
@@ -22,6 +22,11 @@ export default function AuthGate({ children }: { children: React.ReactNode }) {
           Iniciá sesión con el Gmail que agregaste a la lista familiar para ver y
           marcar el itinerario.
         </p>
+        {authError && (
+          <div className="max-w-xs rounded-xl bg-red-50 border border-red-200 p-3 text-xs text-red-700">
+            {authError}
+          </div>
+        )}
         {unauthorized && (
           <div className="max-w-xs rounded-xl bg-red-50 border border-red-200 p-3 text-sm text-red-700">
             <p className="font-medium">

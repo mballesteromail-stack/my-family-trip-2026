@@ -3,7 +3,8 @@
 import { createContext, useContext, useEffect, useState, ReactNode } from "react";
 import {
   onAuthStateChanged,
-  signInWithPopup,
+  getRedirectResult,
+  signInWithRedirect,
   signOut as firebaseSignOut,
   User,
 } from "firebase/auth";
@@ -16,6 +17,7 @@ interface AuthState {
   unauthorized: boolean;
   deniedEmail: string | null;
   isAdmin: boolean;
+  authError: string | null;
   signIn: () => Promise<void>;
   signOut: () => Promise<void>;
 }
@@ -27,8 +29,22 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [loading, setLoading] = useState(true);
   const [unauthorized, setUnauthorized] = useState(false);
   const [deniedEmail, setDeniedEmail] = useState<string | null>(null);
+  const [authError, setAuthError] = useState<string | null>(null);
 
   useEffect(() => {
+    // Desregistrar cualquier Service Worker que haya quedado pegado de una
+    // versión anterior (este proyecto nunca agrega uno a propósito): un SW
+    // viejo puede seguir sirviendo respuestas cacheadas para siempre.
+    if ("serviceWorker" in navigator) {
+      navigator.serviceWorker.getRegistrations().then((regs) => {
+        regs.forEach((r) => r.unregister());
+      });
+    }
+
+    getRedirectResult(auth).catch((err) => {
+      setAuthError(err?.message ?? "Error al iniciar sesión.");
+    });
+
     const unsub = onAuthStateChanged(auth, async (firebaseUser) => {
       if (firebaseUser && !isAllowedEmail(firebaseUser.email)) {
         setUnauthorized(true);
@@ -47,7 +63,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const signIn = async () => {
     setUnauthorized(false);
-    await signInWithPopup(auth, googleProvider);
+    setAuthError(null);
+    // signInWithRedirect en vez de signInWithPopup: el popup depende de
+    // cookies de terceros entre la pestaña y accounts.google.com, que
+    // Safari/Chrome bloquean cada vez más en navegación normal (de ahí que
+    // solo funcionara en modo incógnito). El redirect no tiene ese problema.
+    await signInWithRedirect(auth, googleProvider);
   };
 
   const signOut = async () => {
@@ -62,6 +83,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         unauthorized,
         deniedEmail,
         isAdmin: isAdminEmail(user?.email),
+        authError,
         signIn,
         signOut,
       }}

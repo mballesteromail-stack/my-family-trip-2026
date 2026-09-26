@@ -23,6 +23,14 @@ export default function TransportPage() {
         Si tenés la app MYmta instalada en el iPhone, este link la abre directo. Si
         no, abre el estado del servicio en la web.
       </p>
+      <a
+        href="https://apps.apple.com/us/search?term=mta%20subway%20bus"
+        target="_blank"
+        rel="noopener noreferrer"
+        className="mt-1 block text-center text-xs text-brand-600 underline"
+      >
+        ¿No se abrió la app? Buscarla en la App Store
+      </a>
 
       <ul className="mt-4 space-y-2">
         {transport.fixedRules.map((rule, i) => (

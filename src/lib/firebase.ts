@@ -1,5 +1,5 @@
 import { initializeApp, getApps, getApp } from "firebase/app";
-import { getAuth, GoogleAuthProvider } from "firebase/auth";
+import { getAuth, GoogleAuthProvider, setPersistence, browserLocalPersistence } from "firebase/auth";
 import { getFirestore } from "firebase/firestore";
 
 const firebaseConfig = {
@@ -25,6 +25,12 @@ export const app = isBrowser
 export const auth = isBrowser
   ? getAuth(app!)
   : (undefined as unknown as ReturnType<typeof getAuth>);
+
+// Guarda la sesión en el dispositivo (localStorage) para no tener que
+// loguearse de nuevo cada vez que se abre la app.
+if (isBrowser) {
+  setPersistence(auth, browserLocalPersistence).catch(() => {});
+}
 export const db = isBrowser
   ? getFirestore(app!)
   : (undefined as unknown as ReturnType<typeof getFirestore>);
