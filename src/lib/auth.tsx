@@ -58,7 +58,21 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       }
       setLoading(false);
     });
-    return unsub;
+
+    // Safari a veces restaura la página desde su caché de navegación
+    // (bfcache) al volver de un sitio externo como accounts.google.com, en
+    // vez de recargarla de verdad. Ahí el código de arriba nunca se vuelve
+    // a ejecutar, así que el login de Google parece "no hacer nada" (loop).
+    // Forzamos una recarga real cuando eso pasa.
+    const onPageShow = (e: PageTransitionEvent) => {
+      if (e.persisted) window.location.reload();
+    };
+    window.addEventListener("pageshow", onPageShow);
+
+    return () => {
+      unsub();
+      window.removeEventListener("pageshow", onPageShow);
+    };
   }, []);
 
   const signIn = async () => {
