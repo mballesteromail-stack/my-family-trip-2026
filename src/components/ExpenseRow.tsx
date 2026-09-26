@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useExpenses, useExpenseActions } from "@/hooks/useExpenses";
 import { useAuth } from "@/lib/auth";
+import { formatUSD } from "@/lib/format";
 
 interface Props {
   dayId: string;
@@ -37,7 +38,7 @@ export default function ExpenseRow({ dayId, label }: Props) {
       <div className="flex items-center justify-between gap-3">
         <span className="text-sm text-slate-700">{label}</span>
         <div className="flex items-center gap-1">
-          <span className="text-xs text-slate-400">USD</span>
+          <span className="text-xs text-slate-400">$</span>
           <input
             type="number"
             inputMode="decimal"
@@ -62,6 +63,9 @@ export default function ExpenseRow({ dayId, label }: Props) {
           )}
         </div>
       </div>
+      {entry?.amount != null && (
+        <p className="mt-1 text-right text-xs text-slate-400">{formatUSD(entry.amount)}</p>
+      )}
       {error && <p className="mt-1 text-xs text-red-600">{error}</p>}
     </li>
   );

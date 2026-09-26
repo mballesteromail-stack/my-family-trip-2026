@@ -7,15 +7,16 @@ import EditableText from "@/components/EditableText";
 import ExpenseRow from "@/components/ExpenseRow";
 import { useExpenses } from "@/hooks/useExpenses";
 import { useEditableContent } from "@/hooks/useEditableContent";
-
-const DEFAULT_CAP = "3150";
+import { formatUSD, parseUSD } from "@/lib/format";
 
 export default function BudgetPage() {
   const expenses = useExpenses();
   const content = useEditableContent();
   const total = Object.values(expenses).reduce((sum, e) => sum + (e.amount || 0), 0);
-  const capText = content["budget-cap"]?.text ?? DEFAULT_CAP;
-  const CAP = parseFloat(capText.replace(/[^\d.-]/g, "")) || 0;
+  // El tope se edita en la fila "Tope disponible" de arriba (fila 0);
+  // acá solo se lee, para que ambos números nunca queden desincronizados.
+  const capText = content["budget-row-0-total"]?.text ?? budget.rows[0].total;
+  const CAP = parseUSD(capText);
   const remaining = CAP - total;
 
   return (
@@ -72,12 +73,12 @@ export default function BudgetPage() {
       <div className="mt-4 rounded-xl border border-slate-200 bg-slate-50 p-3 text-sm">
         <div className="flex justify-between text-slate-700">
           <span>Gastado</span>
-          <span className="font-semibold">USD {total.toFixed(0)}</span>
+          <span className="font-semibold">{formatUSD(total)}</span>
         </div>
         <div className="mt-1 flex items-center justify-between text-slate-700">
           <span>Tope del viaje</span>
-          <span className="flex items-center gap-1">
-            USD <EditableText id="budget-cap" defaultText={DEFAULT_CAP} as="span" />
+          <span className="font-medium" title='Se edita arriba, en "Tope disponible"'>
+            {formatUSD(CAP)}
           </span>
         </div>
         <div
@@ -86,8 +87,11 @@ export default function BudgetPage() {
           }`}
         >
           <span>{remaining < 0 ? "Nos pasamos" : "Queda"}</span>
-          <span>USD {Math.abs(remaining).toFixed(0)}</span>
+          <span>{formatUSD(Math.abs(remaining))}</span>
         </div>
+        <p className="mt-2 text-xs text-slate-400">
+          El tope se edita arriba, en la fila &quot;Tope disponible&quot;.
+        </p>
       </div>
     </main>
   );

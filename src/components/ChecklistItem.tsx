@@ -37,11 +37,21 @@ export default function ChecklistItem({ id, time, title }: Props) {
               className="text-xs font-semibold uppercase tracking-wide text-brand-600"
             />
           )}
-          <EditableText
-            id={`${id}-text`}
-            defaultText={title}
-            className={`text-sm text-slate-800 ${entry?.done ? "line-through opacity-50" : ""}`}
-          />
+          <div className="flex items-start gap-1">
+            <EditableText
+              id={`${id}-text`}
+              defaultText={title}
+              className={`text-sm text-slate-800 ${entry?.done ? "line-through opacity-50" : ""}`}
+            />
+            {isAdmin && (
+              <span
+                title="Tocá el texto para reemplazar esta actividad (por ejemplo, si el clima no ayuda)"
+                className="shrink-0 text-xs text-slate-300"
+              >
+                🔀
+              </span>
+            )}
+          </div>
 
           {editingNote ? (
             <div className="mt-2 flex gap-2">

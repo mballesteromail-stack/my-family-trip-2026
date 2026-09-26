@@ -24,7 +24,7 @@ function fetchWeather(): Promise<WeatherMap> {
     const url =
       `https://api.open-meteo.com/v1/forecast?latitude=${LAT}&longitude=${LON}` +
       `&daily=temperature_2m_max,temperature_2m_min,precipitation_probability_max,weathercode` +
-      `&temperature_unit=fahrenheit&timezone=America%2FNew_York` +
+      `&timezone=America%2FNew_York` +
       `&start_date=${START_DATE}&end_date=${END_DATE}`;
 
     cachedPromise = fetch(url)
