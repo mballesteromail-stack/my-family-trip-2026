@@ -1,6 +1,7 @@
 "use client";
 
 import { useAuth } from "@/lib/auth";
+import { auth } from "@/lib/firebase";
 import NavBar from "./NavBar";
 
 export default function AuthGate({ children }: { children: React.ReactNode }) {
@@ -44,6 +45,7 @@ export default function AuthGate({ children }: { children: React.ReactNode }) {
         >
           Ingresar con Google
         </button>
+        <p className="text-[10px] text-slate-300">authDomain: {auth?.config?.authDomain}</p>
       </div>
     );
   }
