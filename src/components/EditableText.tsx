@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useEditableContent, useEditableContentActions } from "@/hooks/useEditableContent";
+import { useAuth } from "@/lib/auth";
 
 interface Props {
   id: string;
@@ -11,11 +12,17 @@ interface Props {
 }
 
 export default function EditableText({ id, defaultText, as = "p", className }: Props) {
+  const { isAdmin } = useAuth();
   const items = useEditableContent();
   const { setText } = useEditableContentActions();
   const current = items[id]?.text ?? defaultText;
   const [editing, setEditing] = useState(false);
   const [draft, setDraft] = useState(current);
+
+  if (!isAdmin) {
+    const ReadOnlyTag = as;
+    return <ReadOnlyTag className={className}>{current}</ReadOnlyTag>;
+  }
 
   if (editing) {
     return (

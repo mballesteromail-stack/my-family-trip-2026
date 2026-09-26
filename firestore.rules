@@ -2,8 +2,8 @@ rules_version = '2';
 
 service cloud.firestore {
   match /databases/{database}/documents {
-    // Solo los emails de la familia (los mismos que en src/lib/allowedEmails.ts)
-    // pueden leer y escribir el estado del checklist.
+    // Toda la familia (los mismos emails que en src/lib/allowedEmails.ts)
+    // puede leer. Solo los administradores pueden escribir.
     function isFamily() {
       return request.auth != null &&
         request.auth.token.email in [
@@ -13,16 +13,27 @@ service cloud.firestore {
         ];
     }
 
+    function isAdmin() {
+      return request.auth != null &&
+        request.auth.token.email in [
+          'mballestero.mail@gmail.com',
+          'soledadcalvo.13@gmail.com'
+        ];
+    }
+
     match /checklist/{itemId} {
-      allow read, write: if isFamily();
+      allow read: if isFamily();
+      allow write: if isAdmin();
     }
 
     match /content/{itemId} {
-      allow read, write: if isFamily();
+      allow read: if isFamily();
+      allow write: if isAdmin();
     }
 
     match /expenses/{dayId} {
-      allow read, write: if isFamily();
+      allow read: if isFamily();
+      allow write: if isAdmin();
     }
   }
 }

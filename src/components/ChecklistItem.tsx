@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useChecklist, useChecklistActions } from "@/hooks/useChecklist";
+import { useAuth } from "@/lib/auth";
 import EditableText from "./EditableText";
 
 interface Props {
@@ -11,6 +12,7 @@ interface Props {
 }
 
 export default function ChecklistItem({ id, time, title }: Props) {
+  const { isAdmin } = useAuth();
   const { items } = useChecklist();
   const { setDone, setNote } = useChecklistActions();
   const entry = items[id];
@@ -23,8 +25,9 @@ export default function ChecklistItem({ id, time, title }: Props) {
         <input
           type="checkbox"
           checked={!!entry?.done}
+          disabled={!isAdmin}
           onChange={(e) => setDone(id, e.target.checked)}
-          className="mt-1 h-5 w-5 shrink-0 rounded border-slate-300 text-brand-600 focus:ring-brand-500"
+          className="mt-1 h-5 w-5 shrink-0 rounded border-slate-300 text-brand-600 focus:ring-brand-500 disabled:opacity-50"
         />
         <div className="min-w-0 flex-1">
           {time && (
@@ -60,20 +63,24 @@ export default function ChecklistItem({ id, time, title }: Props) {
               </button>
             </div>
           ) : entry?.note ? (
-            <button
-              onClick={() => setEditingNote(true)}
-              className="mt-1 block text-left text-xs text-amber-700"
-            >
-              📝 {entry.note}
-            </button>
-          ) : (
+            isAdmin ? (
+              <button
+                onClick={() => setEditingNote(true)}
+                className="mt-1 block text-left text-xs text-amber-700"
+              >
+                📝 {entry.note}
+              </button>
+            ) : (
+              <p className="mt-1 text-xs text-amber-700">📝 {entry.note}</p>
+            )
+          ) : isAdmin ? (
             <button
               onClick={() => setEditingNote(true)}
               className="mt-1 text-xs text-slate-400 underline"
             >
               + agregar nota
             </button>
-          )}
+          ) : null}
         </div>
       </div>
     </li>

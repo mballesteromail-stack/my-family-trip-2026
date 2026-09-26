@@ -8,13 +8,14 @@ import {
   User,
 } from "firebase/auth";
 import { auth, googleProvider } from "./firebase";
-import { isAllowedEmail } from "./allowedEmails";
+import { isAllowedEmail, isAdminEmail } from "./allowedEmails";
 
 interface AuthState {
   user: User | null;
   loading: boolean;
   unauthorized: boolean;
   deniedEmail: string | null;
+  isAdmin: boolean;
   signIn: () => Promise<void>;
   signOut: () => Promise<void>;
 }
@@ -55,7 +56,15 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   return (
     <AuthContext.Provider
-      value={{ user, loading, unauthorized, deniedEmail, signIn, signOut }}
+      value={{
+        user,
+        loading,
+        unauthorized,
+        deniedEmail,
+        isAdmin: isAdminEmail(user?.email),
+        signIn,
+        signOut,
+      }}
     >
       {children}
     </AuthContext.Provider>
