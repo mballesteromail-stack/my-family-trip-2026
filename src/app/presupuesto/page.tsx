@@ -6,12 +6,16 @@ import Callout from "@/components/Callout";
 import EditableText from "@/components/EditableText";
 import ExpenseRow from "@/components/ExpenseRow";
 import { useExpenses } from "@/hooks/useExpenses";
+import { useEditableContent } from "@/hooks/useEditableContent";
 
-const CAP = 3150;
+const DEFAULT_CAP = "3150";
 
 export default function BudgetPage() {
   const expenses = useExpenses();
+  const content = useEditableContent();
   const total = Object.values(expenses).reduce((sum, e) => sum + (e.amount || 0), 0);
+  const capText = content["budget-cap"]?.text ?? DEFAULT_CAP;
+  const CAP = parseFloat(capText.replace(/[^\d.-]/g, "")) || 0;
   const remaining = CAP - total;
 
   return (
@@ -70,9 +74,11 @@ export default function BudgetPage() {
           <span>Gastado</span>
           <span className="font-semibold">USD {total.toFixed(0)}</span>
         </div>
-        <div className="mt-1 flex justify-between text-slate-700">
+        <div className="mt-1 flex items-center justify-between text-slate-700">
           <span>Tope del viaje</span>
-          <span>USD {CAP}</span>
+          <span className="flex items-center gap-1">
+            USD <EditableText id="budget-cap" defaultText={DEFAULT_CAP} as="span" />
+          </span>
         </div>
         <div
           className={`mt-1 flex justify-between font-semibold ${
