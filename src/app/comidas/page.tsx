@@ -13,7 +13,7 @@ export default function MealsPage() {
 
       <ul className="mt-4 space-y-3">
         {mealsByDay.map((m, i) => (
-          <li key={m.day} className="rounded-xl border border-slate-200 bg-white p-3 shadow-sm">
+          <li key={m.day} className="rounded-xl border border-slate-200/80 bg-white/90 backdrop-blur-sm p-3 shadow-sm">
             <div className="flex items-baseline justify-between">
               <span className="text-sm font-semibold text-slate-800">{m.day}</span>
               <span className="text-xs text-slate-400">{m.neighborhood}</span>

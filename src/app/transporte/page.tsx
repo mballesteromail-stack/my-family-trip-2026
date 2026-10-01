@@ -34,7 +34,7 @@ export default function TransportPage() {
 
       <ul className="mt-4 space-y-2">
         {transport.fixedRules.map((rule, i) => (
-          <li key={i} className="rounded-xl border border-slate-200 bg-white p-3 shadow-sm">
+          <li key={i} className="rounded-xl border border-slate-200/80 bg-white/90 backdrop-blur-sm p-3 shadow-sm">
             <EditableText id={`transport-rule-${i}`} defaultText={rule} className="text-sm text-slate-700" />
           </li>
         ))}

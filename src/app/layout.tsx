@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import "./globals.css";
 import { AuthProvider } from "@/lib/auth";
 import AuthGate from "@/components/AuthGate";
+import Background from "@/components/Background";
 
 export const metadata: Metadata = {
   title: "Nueva York 2026",
@@ -28,7 +29,8 @@ export const viewport: Viewport = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="es">
-      <body>
+      <body className="relative min-h-screen">
+        <Background />
         <AuthProvider>
           <AuthGate>{children}</AuthGate>
         </AuthProvider>

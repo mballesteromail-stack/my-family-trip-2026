@@ -28,7 +28,7 @@ export default function BudgetPage() {
 
       <ul className="mt-4 space-y-3">
         {budget.rows.map((row, i) => (
-          <li key={i} className="rounded-xl border border-slate-200 bg-white p-3 shadow-sm">
+          <li key={i} className="rounded-xl border border-slate-200/80 bg-white/90 backdrop-blur-sm p-3 shadow-sm">
             <div className="flex items-baseline justify-between gap-2">
               <EditableText
                 id={`budget-row-${i}-concept`}
@@ -70,7 +70,7 @@ export default function BudgetPage() {
         ))}
       </ul>
 
-      <div className="mt-4 rounded-xl border border-slate-200 bg-slate-50 p-3 text-sm">
+      <div className="mt-4 rounded-xl border border-slate-200/80 bg-white/80 backdrop-blur-sm p-3 text-sm shadow-sm">
         <div className="flex justify-between text-slate-700">
           <span>Gastado</span>
           <span className="font-semibold">{formatUSD(total)}</span>

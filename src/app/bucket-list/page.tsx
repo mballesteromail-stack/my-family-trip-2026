@@ -16,7 +16,7 @@ export default function BucketListPage() {
       </h2>
       <ul className="space-y-2">
         {bucketList.alreadyPlanned.map((b, i) => (
-          <li key={i} className="rounded-xl border border-slate-200 bg-white p-3 text-sm shadow-sm">
+          <li key={i} className="rounded-xl border border-slate-200/80 bg-white/90 backdrop-blur-sm p-3 text-sm shadow-sm">
             <EditableText id={`bucket-planned-${i}-item`} defaultText={b.item} className="text-slate-800" />
             <EditableText
               id={`bucket-planned-${i}-day`}
@@ -41,7 +41,7 @@ export default function BucketListPage() {
       </h2>
       <ul className="space-y-2">
         {bucketList.notFitting.map((b, i) => (
-          <li key={i} className="rounded-xl border border-slate-200 bg-slate-50 p-3 shadow-sm">
+          <li key={i} className="rounded-xl border border-slate-200/80 bg-white/70 backdrop-blur-sm p-3 shadow-sm">
             <EditableText id={`bucket-notfitting-${i}`} defaultText={b} className="text-sm text-slate-500" />
           </li>
         ))}

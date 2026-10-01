@@ -34,7 +34,7 @@ export default function ExpenseRow({ dayId, label }: Props) {
   };
 
   return (
-    <li className="rounded-xl border border-slate-200 bg-white p-3 shadow-sm">
+    <li className="rounded-xl border border-slate-200/80 bg-white/90 backdrop-blur-sm p-3 shadow-sm">
       <div className="flex items-center justify-between gap-3">
         <span className="text-sm text-slate-700">{label}</span>
         <div className="flex items-center gap-1">

@@ -13,11 +13,11 @@ export default function HomePage() {
       <p className="mt-1 text-xs text-slate-400">{trip.dateRange}</p>
       <p className="mt-1 text-xs text-slate-400">{trip.party}</p>
 
-      <div className="mt-3 rounded-xl bg-amber-50 border border-amber-200 p-3 text-sm text-amber-800">
+      <div className="mt-3 rounded-xl bg-amber-50/90 backdrop-blur-sm border border-amber-200/80 p-3 text-sm text-amber-800 shadow-sm">
         🎭 {trip.broadway}
       </div>
 
-      <h2 className="mt-6 mb-2 text-sm font-semibold uppercase tracking-wide text-slate-400">
+      <h2 className="mt-6 mb-2 text-sm font-semibold uppercase tracking-wide text-slate-500 font-medium">
         Día por día
       </h2>
       <ul className="space-y-2">
@@ -27,7 +27,7 @@ export default function HomePage() {
             <li key={day.id}>
               <Link
                 href={`/dia/${day.id}`}
-                className="flex items-center justify-between gap-2 rounded-xl border border-slate-200 bg-white p-3 shadow-sm active:scale-[0.99]"
+                className="flex items-center justify-between gap-2 rounded-xl border border-slate-200/80 bg-white/90 backdrop-blur-sm p-3 shadow-sm transition-all hover:bg-white active:scale-[0.99]"
               >
                 <div className="min-w-0">
                   <div className="text-xs font-semibold text-brand-600">{day.weekday}</div>
